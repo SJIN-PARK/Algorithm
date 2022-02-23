@@ -33,7 +33,8 @@ In the first line, the length of the longest bitonic sequence among the subseque
 
 public class Longest_Bitonic_Subsequence  {
 
-	static int[] dp;
+	static int[] dp_L;
+	static int[] dp_R;
 	static int[] arr;
 	public static void main(String[] args) throws IOException{
 		// TODO Auto-generated method stub
@@ -42,42 +43,69 @@ public class Longest_Bitonic_Subsequence  {
 		int N = Integer.parseInt(reader.readLine());
 		
 		arr = new int[N];
-		dp = new int[N];
+		dp_L = new int[N]; //LDS
+		dp_R = new int[N]; //LIS
 		StringTokenizer st = new StringTokenizer(reader.readLine(), " ");
 		
 		for(int i = 0; i < N; i++){
 			arr[i] = Integer.parseInt(st.nextToken());
-			dp[i] = 0;
-			
+		}
+		//calculate LIS, LDS
+		subseq(N);
+		
+		int max_len = 0;
+		for(int i = 0; i < N; i++){
+			if(max_len < dp_R[i] + dp_L[i]){
+				max_len = dp_R[i] + dp_L[i];
+			}
 		}
 		
-		for(int i = 0; i < N; i++){
-			subseq(arr[i], i);
-			System.out.println("arr["+i+"]" + arr[i]);
-			System.out.println("dp["+i+"]" + Arrays.toString(dp));
-		}
+		max_len = max_len - 1;
+		System.out.println("Result : " + max_len);
 		
 	}
-	
-	public static void subseq(int value, int digit){
 		
-		//left
-		for(int i = 0; i < digit; i++){
-			if(value >= arr[i] && arr[i] <= arr[i+1]){
-				dp[i]++;
-			}else{
-				break;
+	public static void subseq(int length){
+		
+		//LIS 
+		//1 5 2 1 4 3 4 5 2 1
+		//1 2 2 1 3 3 4 5 2 1
+		for(int i = 0; i < length; i++){
+			dp_R[i] = 1;	
+			for(int j = 0; j < i; j++){
+//				System.out.println("=======================");
+//				System.out.println("arr["+i+"] : " + arr[i] );
+//				System.out.println("arr["+j+"] : " + arr[j] );
+//				System.out.println("dp_R["+i+"] : " + dp_R[i] );
+//				System.out.println("dp_R["+j+"] : " + dp_R[j] );
+//				System.out.println("dp_R["+j+"]+1 : " + (dp_R[j]+1) );
+				if(arr[i] > arr[j] && dp_R[i] < dp_R[j]+1){
+					dp_R[i] = dp_R[j]+1;
+					
+				}
+//				System.out.println("dp_R["+i+"] : " + dp_R[i] );
 			}
 		}
 		
-		//right
-		for(int i = arr.length - 1; i > digit; i++){
-			if(value >= arr[i] && arr[i] <= arr[i-1]){
-				dp[i]++;
-			}else{
-				break;
+		//LDS
+		//1 5 2 1 4 3 4 5 2 1
+		//1 5 2 1 4 3 3 3 2 1
+		for(int i = length - 1; i >= 0; i--){
+			dp_L[i] = 1;
+			for(int j = length - 1; j > i; j--){
+//				System.out.println("=======================");
+//				System.out.println("arr["+i+"] : " + arr[i] );
+//				System.out.println("arr["+j+"] : " + arr[j] );
+//				System.out.println("dp_L["+i+"] : " + dp_L[i] );
+//				System.out.println("dp_L["+j+"] : " + dp_L[j] );
+//				System.out.println("dp_L["+j+"]+1 : " + (dp_L[j]+1) );
+				if(arr[i] > arr[j] && dp_L[i] < dp_L[j] + 1){
+					dp_L[i] = dp_L[j] + 1;
+				}
+//				System.out.println("dp_L["+i+"] : " + dp_L[i] );
 			}
 		}
+		
 	}
 
 }
