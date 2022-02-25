@@ -30,7 +30,7 @@ public class Jump_Game {
 		// TODO Auto-generated method stub
 		int[] nums = {1,2};
 		int length = nums.length;
-		int farthestPos = nums[length-1];
+		int farthestPos = length - 1;
 		int curFarthestPos = 0;
 			
         if(length == 1){
@@ -54,7 +54,7 @@ public class Jump_Game {
             	}
             }
             
-            if(i + jump == farthestPos){
+            if(curFarthestPos >= farthestPos){
             	System.out.println("Result : " + "True");
             }
             
