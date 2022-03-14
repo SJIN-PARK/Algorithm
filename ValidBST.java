@@ -33,36 +33,20 @@ public class ValidBST extends TreeNode{
 	static boolean check = true;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		
+		check = checkValid(root, Long.MIN_VALUE, Long.MAX_VALUE);
+		//return check;
 	}
 	
-	public static void checkValid(TreeNode leftNode, TreeNode rightNode, int val){
-		
-		if(leftNode == null && rightNode == null){
-			return;
-		}
-		
-		if(leftNode != null && rightNode == null){
-			if(leftNode.val > val){
-				check = false;
-			}else{
-				checkValid(leftNode.left, leftNode.right, leftNode.val);
-			}
-		}else if(leftNode == null && rightNode != null){
-			if(rightNode.val < val){
-				check = false;
-			}else{
-				checkValid(rightNode.left, rightNode.right, rightNode.val);
-			}
-		}else{
-			if(leftNode.val > val || rightNode.val < val){
-				check = false;
-			}else{
-				checkValid(leftNode.left, leftNode.right, leftNode.val);
-				checkValid(rightNode.left, rightNode.right, rightNode.val);
-			}
-		}		
-		
-	}
+	public static boolean valid(TreeNode root, long start, long end){
+        if(root==null){
+            return true;
+        }
+        
+        if(start<root.val && end>root.val){
+            return valid(root.left, start, root.val) && valid(root.right, root.val, end);
+        }
+        return false; 
+    }
 
 }
