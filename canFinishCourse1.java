@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.text.html.ListView;
+
 /*
  * 
 207. Course Schedule
@@ -39,13 +41,17 @@ All the pairs prerequisites[i] are unique.
 
 public class canFinishCourse1 {
 
+	static int numCourses = 3;
+	static int[][] prerequisites = {{1,0},{0,2},{2,1}};
+	
+	static boolean[] dp_visit = new boolean[prerequisites.length];
+	static boolean[] temp_stack = new boolean[prerequisites.length];
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		int numCourses = 3;
-		int[][] prerequisites = {{1,0},{0,2},{2,1}};
 		HashMap<Integer, List<Integer>> map = new HashMap<>();
 		boolean flag = true;
+		
 		
 		for(int i = 0; i < prerequisites.length; i++){
 			int key = 0;
@@ -67,34 +73,49 @@ public class canFinishCourse1 {
 		}
 		
 		for(int i = 0; i < prerequisites.length; i++){
-			int key = 0;
-			int value = 0;
-			List<Integer> val_list = new ArrayList<Integer>();;
-			for(int j = 0; j < 2; j++){
-				key = prerequisites[i][0];
-				value = prerequisites[i][1];
-			}
-			
-			if(map.containsKey(value)){
-				val_list = map.get(value);
-				for(int l = 0; l < val_list.size(); l++){
-					int listVal = val_list.get(l);
-					if(listVal == key){
-						flag = false;
-						break;
-					}
+			int value = prerequisites[i][1];
+			if(!dp_visit[value]){
+				if(!checkValid(map, value, dp_visit, temp_stack)){
+					flag = false;
+					break;
 				}
 			}
-			
-			if(!flag) break;
-			
 		}
 		
-		System.out.println("result : " + flag);
+		System.out.println("Result : " + flag);
+							
+	}
+	
+	public static boolean checkValid(HashMap<Integer, List<Integer>> map, int course_seq, boolean[] dp_visit, boolean[] temp_stack){
+		dp_visit[course_seq] = true;
+		temp_stack[course_seq] = true;
 		
+		List<Integer> map_list = map.get(course_seq);
 		
+		for(int i = 0; i < map_list.size(); i++){
+			int listVal = map_list.get(i);
+			if(temp_stack[listVal]) return false;
+			
+			if(!dp_visit[listVal]){
+				if(!checkValid(map, listVal, dp_visit, temp_stack)){
+					return false;
+				}
+			}
+		}
 		
-
+//		for(int listVal : map_list){
+//			if(temp_stack[listVal]) return false;
+//			
+//			if(!dp_visit[listVal]){
+//				if(!checkValid(map, listVal, dp_visit, temp_stack)){
+//					return false;
+//				}
+//			}
+//		}
+		
+		temp_stack[course_seq] = false;
+		
+		return true;
 	}
 
 }
