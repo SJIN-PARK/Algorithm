@@ -1,6 +1,9 @@
 package LeetCode;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
  * 
@@ -34,40 +37,47 @@ public class largestNumber {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int[] nums = {3,30,34,5,9};
+		int[] nums = {111311, 1113};
 		
-		int total_length = 0;
-		
-		for(int i = 0; i < nums.length; i++){
-			String s = Integer.toString(nums[i]);
-			int length = s.length();
-			total_length += length;
+		String[] strArr = new String[nums.length];
+		for(int i = 0; i < strArr.length; i++){
+			strArr[i] = Integer.toString(nums[i]);
 		}
 		
-		char[] num = new char[total_length];
-		int k = 0;
-		for(int i = 0; i < nums.length; i++){
-			String s = Integer.toString(nums[i]);
-			//System.out.println(" s : " + s);
+		Arrays.sort(strArr, new Comparator<String>(){
 			
-			for(int j = 0; j < s.length(); j++){
-				num[k] = s.charAt(j); 
-				//System.out.println(" k : " + k);
-				//System.out.println(Arrays.toString(num));
-				k++;
+			public int compare(String o1, String o2){
+								
+				System.out.println("o1 : " + o1);
+				System.out.println("o2 : " + o2);
+				
+				String first = o1 + o2;
+				String second = o2 + o1;
+				
+				return second.compareTo(first);
 			}
-//			
-			
+		});
+		
+		System.out.println(Arrays.toString(strArr));
+		
+		
+		String streamSortASC = Stream.of(strArr).sorted().collect(Collectors.joining()); //오름차순  
+		String streamSortDESC = Stream.of(strArr).sorted(Comparator.reverseOrder()).collect(Collectors.joining()); // 내림차순 
+		
+		//Lambda 
+		String streamSortASC_Lambda = Stream.of(strArr).sorted((o1,o2)->o1.compareTo(o2)).collect(Collectors.joining()); //오름차순 
+		String streamSortDESC_Lambda = Stream.of(strArr).sorted((o1,o2)->o2.compareTo(o1)).collect(Collectors.joining()); // 내림차순
+
+		StringBuffer sb = new StringBuffer();
+		for(int i = 0; i < strArr.length; i++){
+			sb.append(strArr[i]);
 		}
 		
-		Arrays.sort(num);
-		String result = "";
-		for(int i = num.length - 1; i >=0; i--){
-			result += Character.toString(num[i]);
+		if(sb.toString().startsWith("0")){
+			return "0";
 		}
 		
-		System.out.println(result);
-		
+		System.out.println(sb.toString());
 
 	}
 
