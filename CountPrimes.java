@@ -33,30 +33,31 @@ public class CountPrimes {
 		// TODO Auto-generated method stub
 		int n = 10000;
 		int result = 0;
-		Boolean[] prime = new Boolean[n];
-		
-		if(n <= 2){
+		boolean[] prime = new boolean[n];
+
+		if (n <= 2) {
 			result = 0;
 		}
-		
+
 		for (int i = 2; i < n; i++) {
-			if (prime[i] == null) {
-				for (int j = i * 2; j < n; j += i) {
-					prime[j] = true;
-				}
+			prime[i] = true;
+		}
+		// Loop's ending condition is i * i < n instead of i < sqrt(n)
+		// to avoid repeatedly calling an expensive function sqrt().
+		for (int i = 2; i * i < n; i++) {
+			if (!prime[i])
+				continue;
+			for (int j = i * i; j < n; j += i) {
+				prime[j] = false;
 			}
 		}
-		
-		System.out.println(Arrays.toString(prime));
-		
-		for(int i = 2; i < prime.length; i++){
-			if(prime[i] == null){
-				result++;
-			}
+		int count = 0;
+		for (int i = 2; i < n; i++) {
+			if (prime[i])
+				count++;
 		}
-		
-		System.out.println(result);
-		
+
+		System.out.println("result : " + result);
 
 	}
 
