@@ -50,12 +50,15 @@ public class canCompleteCircuit {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int[] gas = {2,3,4};
-		int[] cost = {3,4,3};
+		int[] gas = {3,1,1};
+		int[] cost = {1,2,2};
+		
 		
 		int remain_tank = 0;
 		int count = 0;
 		int start_idx = -1;
+		int gas_sum = 0;
+        int cost_sum = 0;
 		
 		if(gas.length == 1){
 			if(gas[0] < cost[0]){
@@ -65,34 +68,29 @@ public class canCompleteCircuit {
 		}
 		
 		for(int i = 0; i < gas.length; i++){
-			count = 0;
-			//check gas[i] station can start
-			if(gas[i] < cost[i]) continue;
-			remain_tank = gas[i] - cost[i];
-			
-			int index = i + 1;
-			boolean flag = true;
-			
-			while(count < gas.length){
-				if(index == gas.length) index = 0;
-				
-				remain_tank += gas[i];
-				if(remain_tank < cost[i]){
-					flag = false;
-					break;
-				}
-				remain_tank -= cost[i];
-				
-				count++;
-				index++;
-			}
-			
-			if(flag){
-				start_idx = i;
-				break;
-			}
+            gas_sum += gas[i]; 
+        }
+        for(int i = 0; i < cost.length; i++){
+            cost_sum += cost[i];
+        }
+        
+        if(cost_sum > gas_sum){
+        	System.out.println("start_idx : " + start_idx);
+        }
+		
+        start_idx = 0;
+		for(int i = 0; i < gas.length; i++){
+			remain_tank += gas[i]-cost[i];
+            System.out.println("total : " + remain_tank);
+            
+            if(remain_tank< 0 ){
+            	remain_tank=0;
+            	start_idx=i+1;
+            }
 			
 		}
+		
+			
 		
 		System.out.println("start_idx : " + start_idx);
 		
